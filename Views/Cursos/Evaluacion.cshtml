@@ -1,0 +1,24 @@
+@model CursoSystem.Models.Evaluacion
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<h2>Evaluación</h2>
+<h3>@Model.Texto</h3>
+
+<form method="post" asp-controller="Evaluaciones" asp-action="Resolver">
+@foreach (var pregunta in Model.Preguntas)
+{
+    <div class="card mt-3 p-3">
+        <h4>@pregunta.Texto</h4>
+        @foreach (var op in pregunta.Opciones)
+        {
+            <div>
+                <input type="radio" name="pregunta_@pregunta.IdPregunta" value="@op.IdOpcion" />
+                @op.Texto
+            </div>
+        }
+    </div>
+}
+
+<button class="btn btn-primary mt-3">Enviar respuestas</button>
+</form>

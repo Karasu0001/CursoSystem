@@ -1,0 +1,45 @@
+@model CursoSystem.Models.Leccion
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>📖 Lección</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">@Model.Contenido</h3>
+            <p class="text-muted">Orden: @Model.Orden</p>
+        </div>
+    </div>
+
+    @if(Model.Evaluaciones != null && Model.Evaluaciones.Any())
+    {
+        <div class="mt-4">
+            <h4>📝 Evaluaciones Disponibles</h4>
+            @foreach (var evaluacion in Model.Evaluaciones)
+            {
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h5>@evaluacion.Texto</h5>
+                        <p class="text-muted">Tipo: @evaluacion.Tipo</p>
+                        <a class="btn btn-success" href="/Evaluaciones/Resolver/@evaluacion.IdEval">
+                            🎯 Realizar Evaluación
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-4">
+            <p>No hay evaluaciones disponibles para esta lección.</p>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="javascript:history.back()" class="btn btn-secondary">↩️ Volver</a>
+        <a href="/Cursos/Index" class="btn btn-primary">🏠 Volver a Cursos</a>
+    </div>
+</div>

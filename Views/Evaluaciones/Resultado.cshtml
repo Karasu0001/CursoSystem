@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var puntaje = ViewBag.Puntaje as int? ?? 0;
+    var total = ViewBag.Total as int? ?? 1;
+    var porcentaje = (puntaje / (double)total) * 100;
+    var esAprobatorio = porcentaje >= 70;
+}
+
+<h2>🎯 Resultado de la Evaluación</h2>
+
+<div class="card mt-4">
+    <div class="card-body text-center">
+        <h3>Tu calificación:</h3>
+        <div class="display-4 @(esAprobatorio ? "text-success" : "text-danger")">
+            @puntaje / @total
+        </div>
+        
+        <div class="mt-3">
+            @if (esAprobatorio)
+            {
+                <div class="alert alert-success">
+                    <h4>✅ ¡Felicidades! Has aprobado la evaluación</h4>
+                    <p>Porcentaje: @porcentaje.ToString("0.0")%</p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <h4>📚 Puedes mejorar</h4>
+                    <p>Porcentaje: @porcentaje.ToString("0.0")%</p>
+                    <p>Intenta nuevamente para mejorar tu calificación.</p>
+                </div>
+            }
+        </div>
+        
+        <div class="mt-4">
+            <a href="/Cursos/Index" class="btn btn-primary">🏠 Volver a Cursos</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">↩️ Volver a la Lección</a>
+        </div>
+    </div>
+</div>

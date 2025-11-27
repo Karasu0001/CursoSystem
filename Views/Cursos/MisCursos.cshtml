@@ -1,0 +1,49 @@
+﻿@model List<CursoSystem.Models.Inscripcion>
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>🎓 Mis Cursos</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var inscripcion in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@inscripcion.Curso?.Titulo</h5>
+                        <p class="card-text">@inscripcion.Curso?.Descripcion</p>
+                        
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: @inscripcion.Progreso%" 
+                                 aria-valuenow="@inscripcion.Progreso" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                @inscripcion.Progreso%
+                            </div>
+                        </div>
+                        
+                        <p><small class="text-muted">
+                            Estado: @inscripcion.Estado<br>
+                            Iniciado: @inscripcion.FechaInicio.ToString("dd/MM/yyyy")
+                        </small></p>
+                        
+                        <a href="/Cursos/Detalle/@inscripcion.Curso?.IdCurso" 
+                           class="btn btn-primary btn-sm">Continuar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <h4>No estás inscrito en ningún curso</h4>
+        <p>Explora los cursos disponibles e inscríbete para comenzar a aprender.</p>
+        <a href="/Cursos" class="btn btn-success">Ver cursos disponibles</a>
+    </div>
+}

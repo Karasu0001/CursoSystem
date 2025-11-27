@@ -1,0 +1,56 @@
+﻿@model CursoSystem.Models.Evaluacion
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>📝 Evaluación: @Model.Texto</h2>
+<p class="text-muted">Tipo: @Model.Tipo</p>
+
+<form method="post" asp-action="Resolver" asp-route-id="@Model.IdEval">
+    @if (Model.Preguntas != null && Model.Preguntas.Any())
+    {
+        @foreach (var pregunta in Model.Preguntas)
+        {
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>@pregunta.Texto</h5>
+                </div>
+                <div class="card-body">
+                    @if (pregunta.Opciones != null && pregunta.Opciones.Any())
+                    {
+                        @foreach (var opcion in pregunta.Opciones)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="radio" 
+                                       name="pregunta_@pregunta.IdPregunta" 
+                                       value="@opcion.IdOpcion" 
+                                       id="opcion_@opcion.IdOpcion" 
+                                       required>
+                                <label class="form-check-label" for="opcion_@opcion.IdOpcion">
+                                    @opcion.Texto
+                                </label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay opciones disponibles para esta pregunta.</p>
+                    }
+                </div>
+            </div>
+        }
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">📤 Enviar Evaluación</button>
+            <a href="javascript:history.back()" class="btn btn-secondary">↩️ Volver</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            No hay preguntas disponibles para esta evaluación.
+        </div>
+        <a href="javascript:history.back()" class="btn btn-secondary">↩️ Volver</a>
+    }
+</form>

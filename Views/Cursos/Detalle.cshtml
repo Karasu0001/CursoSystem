@@ -1,0 +1,103 @@
+@model CursoSystem.Models.Curso
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var estaInscrito = ViewBag.EstaInscrito as bool? ?? false;
+    var cursoId = ViewBag.CursoId as int? ?? 0;
+}
+
+<h2>@Model.Titulo</h2>
+<h4>@Model.Descripcion</h4>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Información del Curso</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Nivel:</strong> @Model.Nivel</p>
+                <p><strong>Duración:</strong> @Model.Duracion</p>
+                
+                @if (!estaInscrito)
+                {
+                    <!-- ✅ FORMULARIO SIMPLIFICADO -->
+                    <form method="post" action="/Cursos/Inscribirse?cursoId=@cursoId">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success btn-lg">
+                            🎓 Inscribirse al Curso
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-success">
+                        <strong>✅ Ya estás inscrito en este curso</strong>
+                        <br>
+                        <a href="/Cursos/MisCursos" class="btn btn-primary mt-2">Ir a mis cursos</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <h3 class="mt-4">Contenido del curso</h3>
+        
+        @if (Model.Modulos != null && Model.Modulos.Any())
+        {
+            @foreach (var modulo in Model.Modulos.OrderBy(m => m.Orden))
+            {
+                <div class="card mt-3">
+                    <div class="card-header bg-light">
+                        <h5>@modulo.Titulo</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (modulo.Lecciones != null && modulo.Lecciones.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var leccion in modulo.Lecciones.OrderBy(l => l.Orden))
+                                {
+                                    <li class="list-group-item">
+                                        @if (estaInscrito)
+                                        {
+                                            <a href="/Cursos/Leccion/@leccion.IdLeccion" class="text-decoration-none">
+                                                📖 @leccion.Contenido
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">📖 @leccion.Contenido</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No hay lecciones en este módulo.</p>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                No hay contenido disponible para este curso.
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Mostrar mensajes temporales -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["Error"]
+    </div>
+}

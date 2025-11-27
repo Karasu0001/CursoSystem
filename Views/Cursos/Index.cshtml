@@ -1,0 +1,44 @@
+@model IEnumerable<CursoSystem.Models.Curso>
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var inscripciones = ViewBag.Inscripciones as List<CursoSystem.Models.Inscripcion> ?? new List<CursoSystem.Models.Inscripcion>();
+}
+
+<h2>📚 Cursos Disponibles</h2>
+
+<div class="row">
+    @foreach(var curso in Model)
+    {
+        var estaInscrito = inscripciones.Any(i => i.IdCurso == curso.IdCurso);
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@curso.Titulo</h5>
+                    <p class="card-text">@curso.Descripcion</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            🎯 Nivel: @curso.Nivel<br>
+                            ⏱️ Duración: @curso.Duracion
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    @if (estaInscrito)
+                    {
+                        <span class="badge bg-success">Inscrito</span>
+                        <a href="/Cursos/Detalle/@curso.IdCurso" class="btn btn-outline-primary btn-sm">Continuar</a>
+                    }
+                    else
+                    {
+                        <a href="/Cursos/Detalle/@curso.IdCurso" class="btn btn-primary btn-sm">Ver Detalles</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="mt-4">
+    <a href="/Cursos/MisCursos" class="btn btn-success">🎓 Ver Mis Cursos</a>
+</div>
